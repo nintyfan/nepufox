@@ -1,0 +1,24 @@
+#!/bin/bash
+export  MOZ_PERMISSIVE_CONTENT_SANDBOX=1
+export	MOZ_ENABLE_WAYLAND=1
+if [ "$1" == "" ]; then
+  a=www.google.com
+else
+  a="$1"
+fi
+nazwa=`qdbus-qt5 org.kde.ActivityManager /ActivityManager/Activities CurrentActivity`
+
+
+if [ "$nazwa" == "78444d04-65a6-47ea-8d51-5a9a833a7a08" ]; then
+  firefox -P  Nowy --new-tab "$a" &
+  exit 0
+fi
+
+if grep "\[$nazwa\]" $HOME/.mozilla/firefox/profiles.ini; then
+ echo
+else
+firefox  -CreateProfile "$nazwa"
+fi
+firefox  -p "$nazwa" --new-tab "$a" &
+
+
